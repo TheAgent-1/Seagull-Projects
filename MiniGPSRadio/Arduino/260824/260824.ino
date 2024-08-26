@@ -49,6 +49,7 @@ RF24 radio(NRF_CE, NRF_CSN);
 void setup() {
   Serial.begin(115200);
   GPS_Setup();
+  LCD_Setup();
   NRF_Setup();
 }
 
@@ -77,6 +78,21 @@ void GPS_Loop() {
   }
 }
 
+void LCD_Setup() {
+  lcd.init();
+  lcd.clear();         
+  lcd.backlight();
+}
+
+void LCD_Loop() {
+  String LAT = String(gps.location.lat());
+  String LONG = String(gps.location.lng());
+
+  lcd.setCursor(0, 0);
+  lcd.print(String("Lat: " + LAT));
+  lcd.setCursor(0, 1);
+  lcd.print(String("Lng: " + LONG));
+}
 
 void NRF_Setup() {
   radio.begin();
