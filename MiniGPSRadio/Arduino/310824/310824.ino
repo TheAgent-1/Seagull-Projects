@@ -1,4 +1,4 @@
-// Board: XIAO_ESP32C3
+// Board: Seeeduino XIAO
 
 
 //Libraries============================
@@ -13,7 +13,7 @@
 
 //Variables============================
 // Main
-const bool Receiver = false;
+const bool Receiver = true;
 
 // GPS
 const int GPS_TX = 0;
@@ -25,8 +25,8 @@ const int Cols = 16;
 const int Rows = 2;
 
 // NRF24L01
-const int NRF_CE = 0;
-const int NRF_CSN = 0;
+const int NRF_CE = 3;
+const int NRF_CSN = 2;
 const byte NRF_address[6] = "5EGU1";
 char data[32] = "placeholder";
 char buffer[32] = {0};
@@ -64,6 +64,7 @@ void loop() {
     }
   }
   LCD_Loop();
+  NRF_Loop();
 }
 //Main=Code=END========================
 
@@ -98,9 +99,9 @@ void LCD_Loop() {
   String LONG = String(gps.location.lng());
 
   lcd.setCursor(0, 0);
-  lcd.print(String("Lat: " + LAT));
+  lcd.print(String("Lt: " + LAT));
   lcd.setCursor(0, 1);
-  lcd.print(String("Lng: " + LONG));
+  lcd.print(String("Lg: " + LONG));
 }
 
 void NRF_Setup() {
@@ -120,7 +121,16 @@ void NRF_Setup() {
 }
 
 void NRF_Loop() {
-  //placeholder
+  Serial.println("nrf loop");
+  if (!Receiver) {
+    char text[] = "Hello World";
+    radio.write(&text, sizeof(text));
+  } else {
+    char text[32] = {0};
+    radio.read(&text, sizeof(text));
+    Serial.println(text);
+  }
+  
 }
 
 //Secondary=Code=END===================
